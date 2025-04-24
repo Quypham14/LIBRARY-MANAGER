@@ -1,0 +1,60 @@
+-- Create database if not exists
+CREATE DATABASE IF NOT EXISTS library_db;
+USE library_db;
+
+-- Users table
+CREATE TABLE IF NOT EXISTS users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL,
+    role VARCHAR(50) DEFAULT 'reader'
+);
+
+-- Authors table
+CREATE TABLE IF NOT EXISTS authors (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    bio TEXT
+);
+
+-- Publishers table
+CREATE TABLE IF NOT EXISTS publishers (
+    publisher_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL
+);
+
+-- Documents table
+CREATE TABLE IF NOT EXISTS documents (
+    document_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author_id INT,  -- Added reference to authors
+    publisher_id INT,
+    publication_year INT,
+    category VARCHAR(100),
+    total_copies INT,
+    available_copies INT,
+    price DECIMAL(10, 2),
+    FOREIGN KEY (author_id) REFERENCES authors(id),  -- Added foreign key constraint for author
+    FOREIGN KEY (publisher_id) REFERENCES publishers(publisher_id)  -- Foreign key constraint for publisher
+);
+
+-- Insert sample data into users table (for login testing)
+INSERT INTO users (username, password, role) VALUES
+('admin', 'admin123', 'admin'),
+('employee', 'emp123', 'staff'),
+('reader', 'reader123', 'reader');
+
+-- Insert sample data into authors table
+INSERT INTO authors (name, bio) VALUES
+('John Doe', 'Famous author known for literary works'),
+('Jane Smith', 'Author specializing in educational books');
+
+-- Insert sample data into publishers table
+INSERT INTO publishers (name) VALUES
+('Publisher A'),
+('Publisher B');
+
+-- Insert sample data into documents table
+INSERT INTO documents (title, author_id, publisher_id, publication_year, category, total_copies, available_copies, price) VALUES
+('Work 1', 1, 1, 2020, 'Literature', 100, 50, 150.00),
+('Textbook 2', 2, 2, 2021, 'Education', 200, 150, 120.00);
